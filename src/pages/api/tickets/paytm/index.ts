@@ -19,17 +19,22 @@ export default async function handler(
 ) {
   const q = (req.query["q"] || "") as string;
   const movieCode = (req.query["movieCode"] || "") as string;
+  const date = (req.query["date"] || "") as string;
 
   if (!movieCode) {
     return res.status(400).json({ error: "Movie Code Missing", data: null });
   }
 
-  const { error, data } = await checkThetreIsAvailable(movieCode);
+  if (!date) {
+    return res.status(400).json({ error: "Date Missing", data: null });
+  }
+
+  const { error, data } = await checkThetreIsAvailable(movieCode, date);
 
   if (error) {
     sendErrorMessage(CHANNELS["ticket-updates"], {
       ...DEFAULT_USER_PROFILE,
-      content: "Something went wrong while retrieving the ticket.",
+      content: `Something went wrong while retrieving the ticket || ${movieCode} | ${date}`,
     });
 
     return res.status(500).json({ error, data: null });
@@ -54,9 +59,7 @@ export default async function handler(
       .setTitle(content)
       .setColor(0x198754)
       .setDescription(
-        `Book ASAP using the link given. \n ${matches.join(
-        ", "
-      )}`
+        `Book ASAP using the link given. \n ${matches.join(", ")}`
       )
       .setImage(movieCoverImage)
       .setThumbnail(movieCoverImage)

@@ -1,9 +1,9 @@
 import { MovieSearchResponse } from "./types/movie";
 
-export const checkThetreIsAvailable = async (movieCode: string) => {
+export const checkThetreIsAvailable = async (movieCode: string, date: string) => {
   try {
     const res = await fetch(
-      `https://apiproxy.paytm.com/v3/movies/search/movie?meta=1&reqData=1&city=chennai&movieCode=${movieCode}&date=2023-10-20&version=3&site_id=1&channel=HTML5&child_site_id=1`,
+      `https://apiproxy.paytm.com/v3/movies/search/movie?meta=1&reqData=1&city=chennai&movieCode=${movieCode}&date=${date}&version=3&site_id=1&channel=HTML5&child_site_id=1`,
       { cache: "no-cache" }
     );
 
